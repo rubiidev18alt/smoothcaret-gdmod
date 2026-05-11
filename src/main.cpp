@@ -21,8 +21,11 @@ class $modify(MyCCTextInputNode, CCTextInputNode) {
             if (auto* label = typeinfo_cast<CCLabelBMFont*>(child)) {
                 std::string_view content = label->getString();
                 if (content == "|") {
-                    m_fields->m_trueCaret = label;
-					break;
+					// log::info("fntfile: {}", label->getFntFile());
+					if (std::string_view(label->getFntFile()) == "chatFont.fnt" ) {
+						m_fields->m_trueCaret = label;
+						break;
+					}
 					
                 }
             }
@@ -30,13 +33,19 @@ class $modify(MyCCTextInputNode, CCTextInputNode) {
 
 		auto trueCaret = m_fields->m_trueCaret;
 
+		if (!trueCaret) {
+			log::warn("Could not find the true caret");
+			return true; 
+		}
 		auto smoothCaret = CCLabelBMFont::create("|", "chatFont.fnt");
 		smoothCaret->setColor(trueCaret->getColor());
 		smoothCaret->setOpacity(trueCaret->getOpacity());
 
 		smoothCaret->setContentSize(trueCaret->getContentSize());
-		smoothCaret->setAnchorPoint({0.5f, 0.5f});
-		smoothCaret->setPosition({2, -1});
+		smoothCaret->setAnchorPoint(trueCaret->getAnchorPoint());
+		smoothCaret->ignoreAnchorPointForPosition(trueCaret->isIgnoreAnchorPointForPosition());
+
+		smoothCaret->setPosition(trueCaret->getPosition());
 		smoothCaret->setScale(trueCaret->getScale());
 		
 
@@ -45,7 +54,7 @@ class $modify(MyCCTextInputNode, CCTextInputNode) {
 		trueCaret->setOpacity(0); // so you cant see it but then i can check later if its visible, and then steal it >:3
 
 
-		this->addChild(smoothCaret);
+		trueCaret->getParent()->addChild(smoothCaret);
 		this->schedule(schedule_selector(MyCCTextInputNode::updSmoothCaret));
 		m_fields->m_smoothCaret = smoothCaret;
 
@@ -59,6 +68,13 @@ class $modify(MyCCTextInputNode, CCTextInputNode) {
 
 		CCPoint oldPos = smoothCaret->getPosition();
     	CCPoint targetPos = trueCaret->getPosition();
+
+		// make sure settings are applied
+		smoothCaret->setColor(trueCaret->getColor());
+
+		smoothCaret->setContentSize(trueCaret->getContentSize());
+		smoothCaret->setAnchorPoint(trueCaret->getAnchorPoint());
+		smoothCaret->ignoreAnchorPointForPosition(trueCaret->isIgnoreAnchorPointForPosition());
 
 		float lerpSpeed = Mod::get()->getSettingValue<float>("Weight"); 
     
