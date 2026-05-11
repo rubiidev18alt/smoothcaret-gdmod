@@ -1,4 +1,7 @@
-# 1.0.1
+# 1.0.3
+- the great "i cant count" update
+
+# 1.0.2
 - the great punctuation and grammar update!
 
 # 1.0.1
