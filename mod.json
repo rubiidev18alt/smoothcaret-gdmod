@@ -14,22 +14,64 @@
 	"dependencies": {
 		"geode.node-ids": ">=v1.23.3"
 	},
-
 	"settings": {
-		"Weight":{
+		"Weight": {
 			"type": "float",
 			"default": 15.0,
 			"min": 1,
 			"description": "The 'weight' (or speed) of the smoothness. Higher = faster, Lower = Slower"
 		},
-
-		"Stretch":{
+		"Easing": {
+			"type": "string",
+			"name": "Easing",
+			"default": "Linear",
+			"one-of": [
+				"Linear",
+				"Sine In",
+				"Sine Out",
+				"Sine In+Out",
+				"Quad In",
+				"Quad Out",
+				"Quad In+Out",
+				"Cubic In",
+				"Cubic Out",
+				"Cubic In+Out",
+				"Quart In",
+				"Quart Out",
+				"Quart In+Out",
+				"Quint In",
+				"Quint Out",
+				"Quint In+Out",
+				"Expo In",
+				"Expo Out",
+				"Expo In+Out",
+				"Circ In",
+				"Circ Out",
+				"Circ In+Out",
+				"Back In",
+				"Back Out",
+				"Back In+Out",
+				"Elastic In",
+				"Elastic Out",
+				"Elastic In+Out",
+				"Bounce In",
+				"Bounce Out",
+				"Bounce In+Out"
+			],
+			"description": "How the caret moves toward its target. Includes in, out, and in+out variants for every easing family."
+		},
+		"Stretch": {
 			"type": "bool",
 			"default": false,
 			"description": "Whether or not to do a cool stretch thingy."
 		}
 	},
-
-	"tags": ["offline", "enhancement", "interface"],
-	"links": {"source": "https://github.com/DominoKiddoo/smoothcaret-gdmod"}
+	"tags": [
+		"offline",
+		"enhancement",
+		"interface"
+	],
+	"links": {
+		"source": "https://github.com/DominoKiddoo/smoothcaret-gdmod"
+	}
 }
