@@ -1,7 +1,9 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CCTextInputNode.hpp>
-
+#include <Geode/ui/Popup.hpp>
 using namespace geode::prelude;
+
+class ModSettingsPopup : public geode::Popup {};
 
 class $modify(MyCCTextInputNode, CCTextInputNode) {
 	struct Fields {
@@ -14,51 +16,58 @@ class $modify(MyCCTextInputNode, CCTextInputNode) {
             return false;
         }
 
-        auto children = this->getChildren();
-        if (!children) return true;
+		Loader::get()->queueInMainThread([this]() {
+			if (CCScene::get()->getChildByType<ModSettingsPopup>(0)) {
+				return true; 
+			}
 
-        for (auto* child : CCArrayExt<CCNode*>(children)) {
-            if (auto* label = typeinfo_cast<CCLabelBMFont*>(child)) {
-                std::string_view content = label->getString();
-                if (content == "|") {
-					// log::info("fntfile: {}", label->getFntFile());
-					if (std::string_view(label->getFntFile()) == "chatFont.fnt" ) {
-						m_fields->m_trueCaret = label;
-						break;
+			auto children = this->getChildren();
+			if (!children) return true;
+
+			for (auto* child : CCArrayExt<CCNode*>(children)) {
+				if (auto* label = typeinfo_cast<CCLabelBMFont*>(child)) {
+					std::string_view content = label->getString();
+					if (content == "|") {
+						// log::info("fntfile: {}", label->getFntFile());
+						if (std::string_view(label->getFntFile()) == "chatFont.fnt" ) {
+							m_fields->m_trueCaret = label;
+							break;
+						}
+						
 					}
-					
-                }
-            }
-        }
+				}
+			}
 
-		auto trueCaret = m_fields->m_trueCaret;
+			auto trueCaret = m_fields->m_trueCaret;
 
-		if (!trueCaret) {
-			log::warn("Could not find the true caret");
-			return true; 
-		}
-		auto smoothCaret = CCLabelBMFont::create("|", "chatFont.fnt");
-		smoothCaret->setColor(trueCaret->getColor());
-		smoothCaret->setOpacity(trueCaret->getOpacity());
+			if (!trueCaret) {
+				log::warn("Could not find the true caret");
+				return true; 
+			}
+			auto smoothCaret = CCLabelBMFont::create("|", "chatFont.fnt");
+			smoothCaret->setColor(trueCaret->getColor());
+			smoothCaret->setOpacity(trueCaret->getOpacity());
 
-		smoothCaret->setContentSize(trueCaret->getContentSize());
-		smoothCaret->setAnchorPoint(trueCaret->getAnchorPoint());
-		smoothCaret->ignoreAnchorPointForPosition(trueCaret->isIgnoreAnchorPointForPosition());
+			smoothCaret->setContentSize(trueCaret->getContentSize());
+			smoothCaret->setAnchorPoint(trueCaret->getAnchorPoint());
+			smoothCaret->ignoreAnchorPointForPosition(trueCaret->isIgnoreAnchorPointForPosition());
 
-		smoothCaret->setPosition(trueCaret->getPosition());
-		smoothCaret->setScale(trueCaret->getScale());
-		
+			smoothCaret->setPosition(trueCaret->getPosition());
+			smoothCaret->setScale(trueCaret->getScale());
+			
 
-		smoothCaret->setID("smooth-caret"_spr);
-		
-		trueCaret->setOpacity(0); // so you cant see it but then i can check later if its visible, and then steal it >:3
+			smoothCaret->setID("smooth-caret"_spr);
+			
+			trueCaret->setOpacity(0); // so you cant see it but then i can check later if its visible, and then steal it >:3
 
 
-		trueCaret->getParent()->addChild(smoothCaret);
-		this->schedule(schedule_selector(MyCCTextInputNode::updSmoothCaret));
-		m_fields->m_smoothCaret = smoothCaret;
+			trueCaret->getParent()->addChild(smoothCaret);
 
-        return true;
+			this->schedule(schedule_selector(MyCCTextInputNode::updSmoothCaret));
+			m_fields->m_smoothCaret = smoothCaret;
+			return true;
+		});
+		return true;
     }
 
 	void updSmoothCaret(float dt) {

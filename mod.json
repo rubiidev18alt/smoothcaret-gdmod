@@ -8,7 +8,7 @@
 	},
 	"id": "dominodev.smoothcaret",
 	"name": "Smooth Caret",
-	"version": "v1.0.3",
+	"version": "v1.0.4",
 	"developer": "dominodev",
 	"description": "Lerp That Caret!",
 	"dependencies": {
@@ -20,6 +20,7 @@
 			"type": "float",
 			"default": 15.0,
 			"min": 1,
+			"name": "Weight/Speed",
 			"description": "The 'weight' (or speed) of the smoothness. Higher = faster, Lower = Slower"
 		},
 
