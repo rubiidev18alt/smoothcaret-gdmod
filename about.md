@@ -4,7 +4,7 @@ Ya know that little line thing that appears whenever you type in any input box?
 That's called a <cy>caret</c>!
 Its to <cr>static</c> and moves too robotically. This mod makes it <cb>fluid</c> and <co>smooth</c> :D
 
-You can also make it stretch for it to be even better :
+You can also make it stretch for it to be even better :3
 
 
 ## Bug reports

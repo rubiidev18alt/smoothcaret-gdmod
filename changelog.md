@@ -1,3 +1,7 @@
+# 1.0.4
+- Disabled smooth caret in geode mod settings due to strange behaviour
+
+
 # 1.0.3
 - the great "i cant count" update
 
